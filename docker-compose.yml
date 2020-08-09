@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  webapi:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: node_webapi
+    restart: always
+    hostname: "api"
+    depends_on:
+      - mongo
+    environment: 
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_USERNAME=hiredev
+      - NODE_ENV=development
+    ports: 
+      - 4444:4444
+  mongo:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    hostname: "mongo"
+    environment:
+      # provide your credentials here
+      - MONGO_INITDB_ROOT_USERNAME=rootadmin
+      - MONGO_INITDB_ROOT_PASSWORD=fasdfa019823097asoa
+      - MONGO_NON_ROOT_USERNAME=hiredev
+      - MONGO_NON_ROOT_PASSWORD=asdfghj1
+      - MONGO_INITDB_DATABASE=transitionmanager
+    volumes: 
+      - "mongo-data:/data/db"
+      - "./mongoseed:/docker-entrypoint-initdb.d"
+    ports: 
+      - "27017:27017"
+  
+volumes: 
+  mongo-data:
